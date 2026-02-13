@@ -115,18 +115,15 @@ export default function ValentinesProposal() {
             exit={{ opacity: 0 }}
             className="flex flex-col items-center"
           >
-            {/* Image Grid Background */}
-            <div className="absolute inset-0 grid grid-cols-6 opacity-10">
-              {images.slice(0, 36).map((src, index) => (
-                <div key={index} className="relative h-full">
-                  <Image
-                    src={src}
-                    alt={`Memory ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <Image
+                src="/proposal-background.jpg"
+                alt="Background"
+                fill
+                className="object-cover opacity-30"
+                priority
+              />
             </div>
 
             <h2
