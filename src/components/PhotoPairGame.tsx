@@ -6,24 +6,24 @@ import { useState, useEffect } from "react";
 
 // 18 images
 const images = [
-  "/game-photos/1.avif",
-  "/game-photos/2.avif",
-  "/game-photos/3.avif",
-  "/game-photos/4.avif",
-  "/game-photos/5.avif",
-  "/game-photos/6.avif",
-  "/game-photos/7.avif",
-  "/game-photos/8.avif",
-  "/game-photos/9.avif",
-  "/game-photos/10.avif",
-  "/game-photos/11.avif",
-  "/game-photos/12.avif",
-  "/game-photos/13.avif",
-  "/game-photos/14.avif",
-  "/game-photos/15.avif",
-  "/game-photos/16.avif",
-  "/game-photos/17.avif",
-  "/game-photos/18.avif",
+  "/game-photos/1.jpg",
+  "/game-photos/2.jpg",
+  "/game-photos/3.jpg",
+  "/game-photos/4.jpg",
+  "/game-photos/5.jpg",
+  "/game-photos/6.jpg",
+  "/game-photos/7.jpg",
+  "/game-photos/8.jpg",
+  "/game-photos/9.jpg",
+  "/game-photos/10.jpg",
+  "/game-photos/11.jpg",
+  "/game-photos/12.jpg",
+  "/game-photos/13.jpg",
+  "/game-photos/14.jpg",
+  "/game-photos/15.jpg",
+  "/game-photos/16.jpg",
+  "/game-photos/17.jpg",
+  "/game-photos/18.jpg",
 ];
 
 // Create 18 pairs of images (36 images in total)
@@ -57,16 +57,20 @@ export default function PhotoPairGame({
   const [selected, setSelected] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [incorrect, setIncorrect] = useState<number[]>([]);
-  const [images] = useState(() => shuffleArray([...imagePairs]));
+  const [shuffledImages, setShuffledImages] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    setShuffledImages(shuffleArray([...imagePairs]));
+  }, []);
 
   const handleClick = async (index: number) => {
-    if (selected.length === 2 || matched.includes(index) || selected.includes(index)) return;
+    if (!shuffledImages || selected.length === 2 || matched.includes(index) || selected.includes(index)) return;
 
     if (selected.length === 1) {
       const firstIndex = selected[0];
       setSelected((prev) => [...prev, index]);
 
-      if (images[firstIndex] === images[index]) {
+      if (shuffledImages[firstIndex] === shuffledImages[index]) {
         setMatched((prev) => [...prev, firstIndex, index]);
         setSelected([]);
       } else {
@@ -88,16 +92,37 @@ export default function PhotoPairGame({
     }
   }, [matched, handleShowProposal]);
 
+  if (!shuffledImages) {
+    // Render the heart-shaped grid with face-down cards during SSR / before hydration
+    return (
+      <div className="grid grid-cols-9 gap-1 lg:gap-2 max-w-[95vw] mx-auto place-items-center">
+        {heartLayout.flat().map((index, i) =>
+          index !== null ? (
+            <div
+              key={i}
+              className="w-[11vh] h-[11vh] lg:w-20 lg:h-20 relative"
+            >
+              <div className="w-full h-full bg-gray-300 rounded-sm lg:rounded-md" />
+            </div>
+          ) : (
+            <div key={i} className="w-[11vh] h-[11vh] lg:w-20 lg:h-20" />
+          ),
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-9 gap-1 lg:gap-2 max-w-[95vw] mx-auto place-items-center">
       {/* Image preload */}
       <div className="hidden">
-        {images.map((image, i) => (
+        {shuffledImages.map((image, i) => (
           <Image
             key={i}
             src={image}
             alt={`Image ${i + 1}`}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -111,7 +136,7 @@ export default function PhotoPairGame({
             className="w-[11vh] h-[11vh] lg:w-20 lg:h-20 relative cursor-pointer"
             whileHover={{ scale: 1.1 }}
             onClick={() => handleClick(index)}
-            style={{ perspective: "1000px" }} // Add perspective for 3D effect
+            style={{ perspective: "1000px" }}
           >
             {/* Back of the card */}
             {!selected.includes(index) && !matched.includes(index) && (
@@ -139,9 +164,10 @@ export default function PhotoPairGame({
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <Image
-                  src={images[index]}
+                  src={shuffledImages[index]}
                   alt={`Imagen ${index + 1}`}
                   fill
+                  sizes="(max-width: 1024px) 11vh, 80px"
                   className="rounded-sm lg:rounded-md object-cover"
                 />
               </motion.div>

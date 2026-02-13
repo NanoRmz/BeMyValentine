@@ -13,14 +13,14 @@ export default function TextFooter() {
       <h1
         className={`absolute left-10 bottom-5 transform -translate-y-1/2 text-white text-4xl lg:text-5xl font-bold leading-tight ${playfairDisplay.className}`}
       >
-        <span className="text-gray-400">Match</span> <br /> the photo pairs
+        <span className="text-gray-400">Juega el</span> <br /> memorama papoy!
       </h1>
 
       {/* Right Text */}
       <h1
         className={`absolute right-10 bottom-5 transform -translate-y-1/2 text-white text-4xl lg:text-5xl font-bold leading-tight text-right ${playfairDisplay.className}`}
       >
-        to reveal <br /> <span className="text-gray-400">the surprise</span>
+        Y descubre <br /> <span className="text-gray-400">el chisme...</span>
       </h1>
 
       {/* Copyright */}
