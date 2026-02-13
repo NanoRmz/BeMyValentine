@@ -91,7 +91,7 @@ export default function ValentinesProposal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            Congratulations! You have completed the game.
+            Felicidades ganaste el juego! pero no hay chisme...
           </motion.h2>
         )}
         {step === 1 && (
@@ -103,7 +103,7 @@ export default function ValentinesProposal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            I have a surprise for you!
+            Tengo una pregunta para ti
           </motion.h2>
         )}
         {step === 2 && (
